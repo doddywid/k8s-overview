@@ -1,0 +1,37 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  namespace: default
+  name: vs-arcadia
+spec:
+  ingressClassName: nginx
+  host: arcadia.vs.f5demo.id
+  tls:
+    secret: default-server-secret
+  upstreams:
+  - name: pool-arcadia-main
+    service: main
+    port: 80
+  - name: pool-arcadia-backend
+    service: backend
+    port: 80
+  - name: pool-arcadia-app2
+    service: app2
+    port: 80
+  - name: pool-arcadia-app3
+    service: app3
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: pool-arcadia-main
+  - path: /files
+    action:
+      pass: pool-arcadia-backend
+  - path: /api
+    action:
+      pass: pool-arcadia-app2
+  - path: /app3
+    action:
+      pass: pool-arcadia-app3
+

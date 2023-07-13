@@ -1,0 +1,207 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adjectives
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adjectives
+  template:
+    metadata:
+      labels:
+        app: adjectives
+    spec:
+      containers:
+      - name: adjectives
+        image: registry.gitlab.com/sentence-application/adjectives/volterra:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: animals
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: animals
+  template:
+    metadata:
+      labels:
+        app: animals
+    spec:
+      containers:
+      - name: animals
+        image: registry.gitlab.com/sentence-application/animals/volterra:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colors
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: colors
+  template:
+    metadata:
+      labels:
+        app: colors
+    spec:
+      containers:
+      - name: colors
+        image: registry.gitlab.com/sentence-application/colors/volterra:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locations
+  template:
+    metadata:
+      labels:
+        app: locations
+    spec:
+      containers:
+      - name: locations
+        image: registry.gitlab.com/sentence-application/locations/volterra:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: registry.gitlab.com/sentence-application/frontend/frontend-ns-8080:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NAMESPACE
+          value: default
+        - name: GOOGLETAGID
+          value: GTM-PC5HX2H
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: generator
+  template:
+    metadata:
+      labels:
+        name: generator
+    spec:
+      containers:
+      - name: generator
+        image: registry.gitlab.com/sentence-application/generator/volterra-v0:dynamic
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NAMESPACE
+          value: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adjectives
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: adjectives
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: animals
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: animals
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: colors
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: colors
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locations
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: locations
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: generator
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: generator

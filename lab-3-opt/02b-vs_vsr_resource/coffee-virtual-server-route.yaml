@@ -1,0 +1,22 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServerRoute
+metadata:
+  name: coffee 
+  namespace: coffee
+spec:
+  host: cafe.f5demo.id
+  upstreams:
+  - name: coffee 
+    service: coffee-svc
+    port: 80
+  subroutes:
+  - path: /coffee 
+    action:
+      pass: coffee
+    policies:
+    - name: rate-limit-policy
+    errorPages:
+    - codes: [503]
+      return:
+        code: 200
+        body: "<center><h1>Oops this is embarrassing! We will be back shortly!</h1></center>"

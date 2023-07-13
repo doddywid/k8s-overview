@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arcadia
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: arcadia.ic.f5demo.id
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: 
+                 name: main
+                 port: 
+                   number: 80

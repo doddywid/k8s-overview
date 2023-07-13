@@ -1,0 +1,44 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  namespace: default
+  name: vs-sentence
+spec:
+  ingressClassName: nginx
+  host: sentence.vs.f5demo.id
+  tls:
+    secret: default-server-secret
+  upstreams:
+  - name: pool-frontend
+    service: frontend
+    port: 80
+  - name: pool-adjectives
+    service: adjectives
+    port: 80
+  - name: pool-animals
+    service: animals
+    port: 80
+  - name: pool-colors
+    service: colors
+    port: 80
+  - name: pool-locations
+    service: locations
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: pool-frontend
+  - path: /adjectives
+    action:
+      pass: pool-adjectives
+  - path: /animals
+    action:
+      pass: pool-animals
+  - path: /colors
+    action:
+      pass: pool-colors
+  - path: /locations
+    action:
+      pass: pool-locations
+
+
