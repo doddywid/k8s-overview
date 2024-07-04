@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firefox
+  namespace: default
+  labels:
+    app: firefox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firefox
+  template:
+    metadata:
+      labels:
+        app: firefox
+    spec:
+      containers:
+      - name: firefox
+        image: jlesage/firefox
+        ports:
+        - containerPort: 5800
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firefox-service
+  namespace: default
+  labels:
+    app: firefox
+spec:
+  type: NodePort
+  ports:
+  - port: 5800
+    protocol: TCP
+    targetPort: 5800
+    nodePort: 30001
+  selector:
+    app: firefox
