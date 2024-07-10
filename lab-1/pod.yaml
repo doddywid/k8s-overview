@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx
-  labels:
-    name: nginx
+  labels:
+    app: nginx
+  name: nginx-pod
 spec:
-  containers:
-  - name: nginx
-    image: nginx
+  containers:
+  - image: nginx
+    name: container1
